@@ -184,3 +184,46 @@ https://www.udemy.com/course/understanding-typescript/
   interface Greetable extends Named, AnotherInterface {} // OK
   class SubClass extends SuperClass {} // only extend one class
   ```
+
+- can use interfaces to define the shape of a function. Both `type` and `interface` defintion are the same
+
+  ```ts
+  type AddFn = (a: number, b: number) => number;
+
+  interface AddFn {
+    (a: number, b: number): number;
+  }
+  ```
+
+- optional properties can be specified with a `?` after the property name. `optionalProp?: number` or for methods `methodName?() {...}`
+- if a class property is optional then, we can make the property optional in the constructor or we can supply a default value
+
+  - if properties are optional, we need to put in checks to make sure methods and such behave properly when properties are undefined
+
+  ```ts
+  class Person implements Greetable {
+    name?: string;
+    age = 30;
+
+    constructor(n?: string) {
+      if (n) {
+        this.name = n;
+      }
+    }
+  }
+  ```
+
+  or
+
+  ```ts
+  class Person implements Greetable {
+    name?: string;
+    age = 30;
+
+    constructor(n: string = 'Joe') {
+      if (n) {
+        this.name = n;
+      }
+    }
+  }
+  ```
