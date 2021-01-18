@@ -92,7 +92,7 @@ https://www.udemy.com/course/understanding-typescript/
     abstract describe(): void;
   }
   ```
-- `private constructor`'s can be used to allow only one instance of a class. The `private` keyword makes the constructor not accessible from outside the class
+- `private constructor`'s can be used to allow only one instance of a class making the class a **singleton class**. The `private` keyword makes the constructor not accessible from outside the class
 
   ```ts
   class AccountingDepartment extends Department {
@@ -114,3 +114,8 @@ https://www.udemy.com/course/understanding-typescript/
 
   const accounting = AccountingDepartment.instance();
   ```
+
+### Interfaces
+
+- describes the structure of an object
+- exists only in Typescript
