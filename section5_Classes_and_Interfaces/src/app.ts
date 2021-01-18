@@ -22,7 +22,30 @@ class Department {
   }
 }
 
-const accounting = new Department('d1', 'Accounting');
+class ITDepartment extends Department {
+  adminds: string[];
+  constructor(id: string, admins: string[]) {
+    super(id, 'IT');
+    this.adminds = admins;
+  }
+}
+
+class AccountingDepartment extends Department {
+  constructor(id: string, private reports: string[]) {
+    super(id, 'Accounting');
+  }
+
+  addReport(text: string) {
+    this.reports.push(text);
+  }
+
+  printReports() {
+    console.log(this.reports);
+  }
+}
+
+const it = new ITDepartment('d1', ['Max']);
+const accounting = new AccountingDepartment('d2', []);
 accounting.addEmployee('Max');
 accounting.addEmployee('Manu');
 // accounting.employees[2] = 'anna'; //bad
@@ -30,6 +53,11 @@ accounting.addEmployee('Manu');
 accounting.describe();
 accounting.name = 'new name'; // possible b/c public variable
 accounting.printEmployeeInformation();
+
+accounting.addReport('Something is wrong?');
+accounting.printReports();
+
+console.log(it);
 
 // const accountingCopy = { name: 's', describe: accounting.describe };
 // accountingCopy.describe();
