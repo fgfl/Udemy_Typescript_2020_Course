@@ -140,6 +140,12 @@ https://www.udemy.com/course/understanding-typescript/
       console.log(`${phrase} ${this.name}`);
     }
   }
+
+  let user1: Greetable;
+  user1 = new Person('Max');
+  user1.greet('Hi my name is');
   ```
 
 - classes that implements an interface can still add more properties
+- a user that is of type `Greetable` guarantees that it has the `greet()` method
+- `readonly` in the interface denotes that property as read only. The class property doesn't need to have `readonly` and Typescript will throw an error if you try to write something to that property
