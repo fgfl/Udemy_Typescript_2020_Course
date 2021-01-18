@@ -149,3 +149,38 @@ https://www.udemy.com/course/understanding-typescript/
 - classes that implements an interface can still add more properties
 - a user that is of type `Greetable` guarantees that it has the `greet()` method
 - `readonly` in the interface denotes that property as read only. The class property doesn't need to have `readonly` and Typescript will throw an error if you try to write something to that property
+- a class can implement multiple interfaces
+
+  ```ts
+  interface Named {
+    readonly name: string;
+  }
+
+  interface Greetable {
+    greet(phrase: string): void;
+  }
+
+  class Person implements Greetable, Named {...}
+  ```
+
+- Or we can use inheritance with interfaces
+
+  ```ts
+  interface Named {
+    readonly name: string;
+  }
+
+  interface Greetable extends Named {
+    greet(phrase: string): void;
+  }
+
+  class Person implements Greetable {...}
+  ```
+
+  - this lets us combine interfaces in cases where some objects will only need one interface an others need more than one
+  - compared to classes we can extend or implement as many interfaces as we want where as classes can only extend one class
+
+  ```ts
+  interface Greetable extends Named, AnotherInterface {} // OK
+  class SubClass extends SuperClass {} // only extend one class
+  ```
