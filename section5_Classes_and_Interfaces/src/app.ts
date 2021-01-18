@@ -17,7 +17,7 @@ class Person implements Greetable {
   }
 }
 
-let user1: Person;
+let user1: Greetable;
 
 user1 = new Person('Max');
 
