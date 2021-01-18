@@ -117,5 +117,29 @@ https://www.udemy.com/course/understanding-typescript/
 
 ### Interfaces
 
-- describes the structure of an object
+- `interface`'s describes the structure of an object
 - exists only in Typescript
+- `interface` can be used like an abstract class to define what the class needs to implement with the `implements` keyword, but it doesn't come with anything that is not "abstract"
+
+  ```ts
+  interface Greetable {
+    name: string;
+
+    greet(phrase: string): void;
+  }
+
+  class Person implements Greetable {
+    name: string;
+    age = 30;
+
+    constructor(n: string) {
+      this.name = n;
+    }
+
+    greet(phrase: string) {
+      console.log(`${phrase} ${this.name}`);
+    }
+  }
+  ```
+
+- classes that implements an interface can still add more properties
