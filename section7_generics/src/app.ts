@@ -34,3 +34,11 @@ function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
 
 console.log(countAndDescribe('Hi There!'));
 console.log(countAndDescribe(['Sport', 'Ball']));
+
+// == The "keyof" Constraint
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+  return 'Value: ' + obj[key];
+}
+
+// extractAndConvert({}, 'name'); // error
+extractAndConvert({ name: 'Max' }, 'name');

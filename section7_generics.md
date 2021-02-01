@@ -62,3 +62,22 @@ function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
 
 - need to extend the interface `Lengthy` to guarantee that the `element` argument has the `.length` property. If we don't extend `Lengthy` then TS will throw error on `element.length` b/c generic type `T` doesn't have the `length` property
 - now we can pass in anything that has a `.length` property. It can be a string, array, or custom class we created.
+
+## The "keyof" Constraint
+
+```ts
+function extractAndConvert(obj: object, key: string) {
+  return 'Value: ' + obj[key];
+}
+```
+
+- can't call the `key` prop of `obj` b/c there is no guarantee that `obj` has a `key` prop
+  - TS error is: **Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.**
+
+```ts
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+  return 'Value: ' + obj[key];
+}
+```
+
+- can use generics to force the `key` arguement to be a _keyof_ the first argument `obj`
