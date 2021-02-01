@@ -57,7 +57,7 @@ More on Advanced Types: https://www.typescriptlang.org/docs/handbook/advanced-ty
 
 ## Type Guard
 
-- patter where you check type of a variable before using at runtime. e.g.
+- pattern where you check type of a variable before using at runtime. e.g.
 
   - regular javascript types
 
