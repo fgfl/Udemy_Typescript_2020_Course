@@ -81,3 +81,29 @@ function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) 
 ```
 
 - can use generics to force the `key` arguement to be a _keyof_ the first argument `obj`
+
+## Generic Classes
+
+- Can apply generic types to classes
+
+```ts
+class DataStorage<T> {
+  private data: T[] = [];
+
+  addItem(item: T) {
+    this.data.push(item);
+  }
+
+  removeItem(item: T) {
+    this.data.splice(this.data.indexOf(item), 1);
+  }
+
+  getItems() {
+    return [...this.data];
+  }
+}
+```
+
+- the problem with the above class is that it doesn't handle `object` types well. If we don't pass in the same reference to the object, it can't find the correct object to remove
+  - We can instead specify that this class can't be created to hold objects
+    `class DataStorage<T extends string | number | boolean> { ... }`
