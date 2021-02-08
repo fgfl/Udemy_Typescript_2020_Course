@@ -67,12 +67,35 @@ console.log(textStorage.getItems());
 
 const numberStorage = new DataStorage<number>();
 
-const objStorage = new DataStorage<object>();
-objStorage.addItem({ name: 'Max' });
-objStorage.addItem({ name: 'Manu' });
-objStorage.removeItem({ name: 'Max' }); // doesn't remove the same object
-console.log(objStorage.getItems());
+// const objStorage = new DataStorage<object>();
+// objStorage.addItem({ name: 'Max' });
+// objStorage.addItem({ name: 'Manu' });
+// objStorage.removeItem({ name: 'Max' }); // doesn't remove the same object
+// console.log(objStorage.getItems());
 
-const maxObj = { name: 'Max2' };
-objStorage.addItem(maxObj);
-objStorage.removeItem(maxObj); // this works because the object has the same reference
+// const maxObj = { name: 'Max2' };
+// objStorage.addItem(maxObj);
+// objStorage.removeItem(maxObj); // this works because the object has the same reference
+
+interface CourseGoal {
+  title: string;
+  description: string;
+  completeUntil: Date;
+}
+
+function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
+  let courseGoal: Partial<CourseGoal> = {};
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.completeUntil = date;
+  return courseGoal as CourseGoal;
+}
+
+const names: Readonly<string[]> = ['Max', 'Anna'];
+// names.push('Manu');
+// names.pop();
+
+let test: Readonly<number> = 5;
+console.log(test);
+test = 6;
+console.log(test);

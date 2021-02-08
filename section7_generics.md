@@ -107,3 +107,40 @@ class DataStorage<T> {
 - the problem with the above class is that it doesn't handle `object` types well. If we don't pass in the same reference to the object, it can't find the correct object to remove
   - We can instead specify that this class can't be created to hold objects
     `class DataStorage<T extends string | number | boolean> { ... }`
+- generics give us flexibility and type safety
+
+## Generic Utility Types
+
+https://www.typescriptlang.org/docs/handbook/utility-types.html
+
+- **`Partial`** makes all the properties optional
+
+  - contrived example: We use `Partial` to be able to assign object properties separately
+
+  ```ts
+  function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
+    let courseGoal: Partial<CourseGoal> = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = date;
+    return courseGoal as CourseGoal;
+  }
+  ```
+
+- **`Readonly`** makes it so you can't change the property of objects or arrays
+
+```ts
+const names: Readonly<string[]> = ['Max', 'Anna'];
+names.push('Manu'); // push and pop with throw TS error. We are changing the array
+names.pop();
+
+let test: Readonly<number> = 5;
+console.log(test); // 5
+test = 6; // This is only. `test` will be changed without errors
+console.log(test); // 6
+```
+
+## Generic Types vs Union Types
+
+- Union types is good if we want to be able to call/create something with that can be of any of the specified types at any time
+- Generic types are good if we want to lock down the type to one specific thing, but it allows us to specify the exact type throughout the whole class or object
