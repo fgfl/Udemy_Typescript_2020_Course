@@ -7,3 +7,5 @@ https://www.udemy.com/course/understanding-typescript/
 ### [Section 6 Advanced Types](./section6_advanced_types.md)
 
 ### [Section 7 Generics](./section7_generics.md)
+
+### [Section 8 Decorators](./section8_decorators.md)
