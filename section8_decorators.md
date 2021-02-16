@@ -93,5 +93,212 @@ WITHTEMPLATE FACTORY
 ## Diving into Property Decorators
 
 - can use decorators on class properties
-  - needs a `target` and a `PropertyName` argument
+  - needs a `target: any` and a `PropertyName: string` argument
 - will execute when property is defined
+
+```ts
+// decorator function
+function Log(target: any, propertyName: string | Symbol) {
+  console.log('Property decorator!');
+  console.log(target, propertyName);
+}
+
+class Prduct {
+  @Log
+  title: string;
+  ...
+}
+```
+
+- above will log the `title` property
+
+## Accessor & Parameter Decorators
+
+- can apply to accessors
+  - need `target: any`, `name: string`, and `descriptor: PropertyDescriptor` args
+  ```ts
+  function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('Accessor decorator!');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+  }
+  ```
+- '' methods
+  - need `target: any`, `name: string | symbol`, and `descriptor: PropertyDescriptor` args
+  ```ts
+  function Log3(target: any, name: string | symbol, descriptor: PropertyDescriptor) {
+    console.log('Method decorator!');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+  }
+  ```
+- '' parameters in methods (args)
+  - need `target: any`, `name: string | symbol`, and `position: number` args
+  - `name` is the name of the method not the parameter name
+  - `position` is the index of the parameter (0, 1, 2, 3, etc)
+- place parameter decorater in front of the parameters
+
+```ts
+function Log4(target: any, name: string | Symbol, position: number) {
+  console.log('Parameter decorator!');
+  console.log(target);
+  console.log(name);
+  console.log(position);
+}
+
+getPriceWithTax(@Log4 tax: number) {
+  return this._price * (1 + tax);
+}
+```
+
+## When do Decorators Execute?
+
+- decorators execute when the class, method, etc is defined
+  - it does not run every time an object of the class with a decorator is created
+  - used to add extra functionality / add extra setup work behind the scene when defining classes
+
+## Returning (and changing) a Class in a Class Decorator
+
+- in the class decorator function (not factory function) we can return a new constructor function
+  - can extend the original class to get more functionality added to the class or just return another class
+
+```ts
+function WithTemplate(template: string, hookId: string) {
+  console.log('WITHTEMPLATE FACTORY');
+  return function<T extends {new(...args: any[]): {name: string}} (originalConstructor: T) {
+    return class extends originalConstructor {
+      constructor(..._: any[]) {
+        super();
+        console.log('Rendering Template');
+        const hookEl = document.getElementById(hookId);
+        if (hookEl) {
+          hookEl.innerHTML = template;
+          hookEl.querySelector('h1')!.textContent = this.name;
+        }
+      }
+
+    }
+  };
+}
+```
+
+- above makes it so that the name of the `name` property of the class gets put on the `hookEl` when an object of the class with the decorator attached is created.
+
+  ```ts
+  @WithTemplate('<h1>My Person Object</h1>', 'app')
+  class Person {
+    name = 'Max';
+
+    constructor() {
+      console.log('Creating person object....');
+    }
+  }
+  ```
+
+  - i.e. if the decorator was on a `Person` class, then `const pers = new Person();` will call the `Person` constructor then do the above to add the person's name to the page
+
+## Other Decorator Return Types
+
+[Property Descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
+
+- can have returns on accessor and method decorators
+- returns on property (class variable) and parameter (args) are ignored by typescript
+- accessor and method decorators return new property descriptors
+
+## Example: Creating an "Autobind" Decorator
+
+```ts
+class Printer {
+  message = 'This works!';
+
+  showMessage() {
+    console.log(this.message);
+  }
+}
+
+const p = new Printer();
+
+const button = document.querySelector('button')!;
+button.addEventListener('click', p.showMessage);
+```
+
+- above doesn't print message because `this` does not have the same context as the class object
+  - JS can solve with `button.addEventListener('click', p.showMessage.bind(p)); `
+  - TS can solve with decorator on the method
+  ```ts
+  function Autobind(target: any, methodName: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+    const adjDescriptor: PropertyDescriptor = {
+      configurable: true,
+      enumerable: false,
+      get() {
+        const boundFn = originalMethod.bind(this);
+        return boundFn;
+      },
+    };
+    return adjDescriptor;
+  }
+  ```
+  - `this` will refer to the what defined the `get` method
+  - put the `Autobind` decorator on the `showMessage` method, then we don't need to do `.bind(p)` in the event listener. We can do `button.addEventListener('click', p.showMessage);`
+
+## Validation with Decorators - First Steps
+
+```ts
+class Course {
+  title: string;
+  price: number;
+
+  constructor(t: string, p: number) {
+    this.title = t;
+    this.price = p;
+  }
+}
+
+const courseForm = document.querySelector('form')!;
+courseForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const titleEl = document.getElementById('title') as HTMLInputElement;
+  const priceEl = document.getElementById('price') as HTMLInputElement;
+
+  const title = titleEl.value;
+  const price = +priceEl.value; // '+' is there to convert to number
+
+  if (title.trim().length > 0) {
+  } // can add something like this for validation. Not the best thought
+
+  const createdCourse = new Course(title, price);
+  console.log(createdCourse);
+});
+```
+
+- The `Course` object is still created if the form is empty (title is "" and price is 0)
+- We can add validation with `if` checks above `const createdCourse = new Course(title, price);`, but we need to do it every time we create a new Course object
+
+- idea: we have decorators and validate function that does this for us. It can be part of a thid party library
+
+```ts
+function Required() {}
+
+function PositiveNumber() {}
+
+function validate(obj: object) {}
+
+class Course {
+  @Required
+  title: string;
+  @PositiveNumber
+  price: number;
+  ...
+}
+// in event listener we can add
+const eventHandler = (e) => {
+  // get form stuff and create Course Object
+  if (!validate(createdCourse)) {
+    alert('Invalid input, please try again!');
+    return;
+  }
+};
+```
