@@ -1,5 +1,7 @@
 # Decorators
 
+https://www.typescriptlang.org/docs/handbook/decorators.html
+
 - instrument for writing code that is easier to use by other developers
 
 ## A First Class Decorator
@@ -94,6 +96,7 @@ WITHTEMPLATE FACTORY
 
 - can use decorators on class properties
   - needs a `target: any` and a `PropertyName: string` argument
+  - `target` is the property or the constructor function if the property is a `static` property
 - will execute when property is defined
 
 ```ts
@@ -302,3 +305,65 @@ const eventHandler = (e) => {
   }
 };
 ```
+
+## Validation with Decorators - Finished
+
+- can access `constructor` prototype of an object which has the name property
+  - `obj.constructor.name`
+  - this is just JS stuff
+
+```ts
+interface ValidatorConfig {
+  [property: string]: {
+    [valiatableProp: string]: string[]; // ['required', 'positive']
+  };
+}
+
+const registeredValidators: ValidatorConfig = {};
+
+function Required(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: [...registeredValidators[target.constructor.name][propName], 'required'],
+  };
+}
+
+function PositiveNumber(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: [...registeredValidators[target.constructor.name][propName], 'positive'],
+  };
+}
+
+function validate(obj: any) {
+  const objValidatorConfig = registeredValidators[obj.constructor.name];
+  if (!objValidatorConfig) {
+    return true;
+  }
+
+  let isValid = true;
+  for (const prop in objValidatorConfig) {
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case 'required':
+          isValid = isValid && !!obj[prop];
+          break;
+        case 'positive':
+          isValid = isValid && obj[prop] > 0;
+          break;
+      }
+    }
+  }
+
+  return isValid;
+}
+```
+
+## Wrap Up
+
+- stuff that uses decorators
+  - **class-validator** packages does the validation stuff in our example but more complex / more functionality
+    - validates length, is date, is email, etc.
+  - **Angular**
+  - **NestJs**
+    - server side framework
