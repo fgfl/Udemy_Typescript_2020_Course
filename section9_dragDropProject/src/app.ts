@@ -1,8 +1,8 @@
-function Autobind(_target: any, _name: string | symbol, descriptor: PropertyDescriptor) {
+// autobind decorator
+function Autobind(_target: any, _methodName: string | symbol, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const boundMethod: PropertyDescriptor = {
     configurable: true,
-    enumerable: false,
     get() {
       return originalMethod.bind(this);
     },
@@ -10,6 +10,8 @@ function Autobind(_target: any, _name: string | symbol, descriptor: PropertyDesc
   return boundMethod;
 }
 
+// ------
+// ProjectInput Class
 class ProjectInput {
   templateEl: HTMLTemplateElement;
   appEl: HTMLDivElement;
