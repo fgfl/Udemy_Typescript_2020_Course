@@ -4,6 +4,8 @@ https://www.typescriptlang.org/docs/handbook/decorators.html
 
 - instrument for writing code that is easier to use by other developers
 
+---
+
 ## A First Class Decorator
 
 - `@` symbol used to signify decorator
@@ -21,6 +23,8 @@ https://www.typescriptlang.org/docs/handbook/decorators.html
 - decorators execute when your class is defined not when it is created
 - decorators have arguments. The number it needs depends on where you use it
 
+---
+
 ## Working with Decorator Factories
 
 - setup a function to return the decorator function
@@ -37,7 +41,9 @@ function Logger(logString: string) {
 @Logger('LOGGING - PERSON')
 ```
 
-## Building More Usefull Decorators
+---
+
+## Building More Useful Decorators
 
 - Can use decorators to generate HTML string when there is an element with certain id
 - use `_` for an argument if we need the argument in the function, but we are not going to use it. It tells Typescript to ignore warning.
@@ -60,6 +66,8 @@ class Person {...}
 
 - The above puts the `h1` tag in the `app` element, creates a new `Person` (b/c we attached the decorator to the `Person` class), then puts the person name where we created the `h1` element
 - Angular does something similar with decorators but has more advanced features
+
+---
 
 ## Adding Multiple Decorators
 
@@ -92,6 +100,8 @@ LOGGER FACTORY
 WITHTEMPLATE FACTORY
 ```
 
+---
+
 ## Diving into Property Decorators
 
 - can use decorators on class properties
@@ -115,6 +125,8 @@ class Prduct {
 
 - above will log the `title` property
 
+---
+
 ## Accessor & Parameter Decorators
 
 - can apply to accessors
@@ -127,7 +139,7 @@ class Prduct {
     console.log(descriptor);
   }
   ```
-- '' methods
+- " " methods
   - need `target: any`, `name: string | symbol`, and `descriptor: PropertyDescriptor` args
   ```ts
   function Log3(target: any, name: string | symbol, descriptor: PropertyDescriptor) {
@@ -137,7 +149,7 @@ class Prduct {
     console.log(descriptor);
   }
   ```
-- '' parameters in methods (args)
+- " " parameters in methods (args)
   - need `target: any`, `name: string | symbol`, and `position: number` args
   - `name` is the name of the method not the parameter name
   - `position` is the index of the parameter (0, 1, 2, 3, etc)
@@ -156,11 +168,15 @@ getPriceWithTax(@Log4 tax: number) {
 }
 ```
 
+---
+
 ## When do Decorators Execute?
 
 - decorators execute when the class, method, etc is defined
   - it does not run every time an object of the class with a decorator is created
   - used to add extra functionality / add extra setup work behind the scene when defining classes
+
+---
 
 ## Returning (and changing) a Class in a Class Decorator
 
@@ -202,6 +218,8 @@ function WithTemplate(template: string, hookId: string) {
 
   - i.e. if the decorator was on a `Person` class, then `const pers = new Person();` will call the `Person` constructor then do the above to add the person's name to the page
 
+---
+
 ## Other Decorator Return Types
 
 [Property Descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
@@ -209,6 +227,8 @@ function WithTemplate(template: string, hookId: string) {
 - can have returns on accessor and method decorators
 - returns on property (class variable) and parameter (args) are ignored by typescript
 - accessor and method decorators return new property descriptors
+
+---
 
 ## Example: Creating an "Autobind" Decorator
 
@@ -246,6 +266,8 @@ button.addEventListener('click', p.showMessage);
   ```
   - `this` will refer to the what defined the `get` method
   - put the `Autobind` decorator on the `showMessage` method, then we don't need to do `.bind(p)` in the event listener. We can do `button.addEventListener('click', p.showMessage);`
+
+---
 
 ## Validation with Decorators - First Steps
 
@@ -306,6 +328,8 @@ const eventHandler = (e) => {
 };
 ```
 
+---
+
 ## Validation with Decorators - Finished
 
 - can access `constructor` prototype of an object which has the name property
@@ -358,6 +382,8 @@ function validate(obj: any) {
   return isValid;
 }
 ```
+
+---
 
 ## Wrap Up
 
