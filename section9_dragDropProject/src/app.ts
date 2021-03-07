@@ -10,48 +10,40 @@ function Autobind(_target: any, _methodName: string | symbol, descriptor: Proper
   return boundMethod;
 }
 
-interface ValidatorConfig {
-  [property: string]: {
-    [validatableProp: string]: string[];
-  };
+// Validation
+interface Validatable {
+  required?: boolean;
+  maxLength?: number;
+  minLength?: number;
+  max?: number;
+  min?: number;
 }
 
-const registeredValidators: ValidatorConfig = {};
-
-const addValidator = (targetName: string, propName: string, validatorName: string) => {
-  registeredValidators[targetName] = {
-    ...registeredValidators[targetName],
-    [propName]: [...registeredValidators[targetName][propName], validatorName],
-  };
-};
-
-// validate decorator
-function isNonEmptyString(target: any, propName: string) {
-  addValidator(target.constructor.name, propName, 'isNonEmptyString');
+interface ValidatableNumber extends Validatable {
+  value: number;
 }
 
-function isValidNumber(target: any, propName: string) {
-  addValidator(target.constructor.name, propName, 'isValidNumber');
+interface ValidatableString extends Validatable {
+  value: string;
 }
 
-function validate(obj: any) {
-  const objValidatorConfig = registeredValidators[obj.constructor.name];
-  if (!objValidatorConfig) {
-    return true;
-  }
-
+function validate(validatableInput: ValidatableNumber | ValidatableString) {
   let isValid = true;
-  for (const prop in objValidatorConfig) {
-    for (const validator of objValidatorConfig[prop]) {
-      switch (validator) {
-        case 'isNonEmptyString':
-          isValid = isValid && obj[prop].trim().length > 0;
-          break;
-        case 'isValidNumber':
-          isValid = isValid && +obj[prop] > 0;
-          break;
-      }
-    }
+  if (validatableInput.required) {
+    isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+  }
+  if (validatableInput.maxLength != null && typeof validatableInput.value === 'string') {
+    // != checks if null or undefined
+    isValid = isValid && validatableInput.value.length <= validatableInput.maxLength;
+  }
+  if (validatableInput.minLength != null && typeof validatableInput.value === 'string') {
+    isValid = isValid && validatableInput.value.length >= validatableInput.minLength;
+  }
+  if (validatableInput.max != null && typeof validatableInput.value === 'number') {
+    isValid = isValid && validatableInput.value <= validatableInput.max;
+  }
+  if (validatableInput.min != null && typeof validatableInput.value === 'number') {
+    isValid = isValid && validatableInput.value >= validatableInput.min;
   }
 
   return isValid;
@@ -89,10 +81,26 @@ class ProjectInput {
     const enteredDescription = this.descriptionInputEl.value;
     const enteredPeople = this.peopleInputEl.value;
 
+    const titleValidatable: ValidatableString = {
+      value: enteredTitle,
+      required: true,
+    };
+    const descriptionValidatable: ValidatableString = {
+      value: enteredDescription,
+      required: true,
+      minLength: 5,
+    };
+    const peopleValidatable: ValidatableNumber = {
+      value: Number(enteredPeople),
+      required: true,
+      min: 1,
+      max: 5,
+    };
+
     if (
-      validate({ value: enteredTitle, required: true, minLength: 5 }) &&
-      validate({ value: enteredDescription, required: true, minLength: 5 }) &&
-      validate({ value: enteredPeople, required: true, minLength: 5 })
+      !validate(titleValidatable) ||
+      !validate(descriptionValidatable) ||
+      !validate(peopleValidatable)
     ) {
       alert('Invalid user input, please try again');
       return;
