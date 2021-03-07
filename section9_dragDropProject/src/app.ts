@@ -49,6 +49,34 @@ function validate(validatableInput: ValidatableNumber | ValidatableString) {
   return isValid;
 }
 
+// ProjectLIst Class
+class ProjectLIst {
+  templateEl: HTMLTemplateElement;
+  hostEl: HTMLDivElement;
+  projectsEl: HTMLElement;
+
+  constructor(private type: 'active' | 'finished') {
+    this.templateEl = document.getElementById('project-list')! as HTMLTemplateElement;
+    this.hostEl = document.getElementById('app')! as HTMLDivElement;
+    const projectListNode = document.importNode(this.templateEl.content, true);
+    this.projectsEl = projectListNode.firstElementChild as HTMLElement;
+    this.projectsEl.id = `${this.type}-projects`;
+
+    this.attach();
+    this.renderContent();
+  }
+
+  private renderContent() {
+    const listId = `${this.type}-projects-list`;
+    this.projectsEl.querySelector('ul')!.id = listId;
+    this.projectsEl.querySelector('h2')!.textContent = this.type.toUpperCase() + ' PROJECTS';
+  }
+
+  private attach() {
+    this.hostEl.insertAdjacentElement('beforeend', this.projectsEl);
+  }
+}
+
 // ------
 // ProjectInput Class
 class ProjectInput {
@@ -91,7 +119,7 @@ class ProjectInput {
       minLength: 5,
     };
     const peopleValidatable: ValidatableNumber = {
-      value: Number(enteredPeople),
+      value: +enteredPeople,
       required: true,
       min: 1,
       max: 5,
@@ -105,7 +133,7 @@ class ProjectInput {
       alert('Invalid user input, please try again');
       return;
     } else {
-      return [enteredTitle, enteredDescription, Number(enteredPeople)];
+      return [enteredTitle, enteredDescription, +enteredPeople];
     }
   }
 
@@ -136,3 +164,5 @@ class ProjectInput {
 }
 
 const prjInput = new ProjectInput();
+const activePrjList = new ProjectLIst('active');
+const finishedPrjList = new ProjectLIst('finished');
