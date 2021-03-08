@@ -10,6 +10,18 @@ function Autobind(_target: any, _methodName: string | symbol, descriptor: Proper
   return boundMethod;
 }
 
+// Drag & Drop Interfaces
+interface Draggable {
+  dragStartHandler(event: DragEvent): void;
+  dragEndHandler(event: DragEvent): void;
+}
+
+interface DragTarget {
+  dragOverHandler(event: DragEvent): void;
+  dropHanlder(event: DragEvent): void;
+  dragLeaveHanlder(event: DragEvent): void;
+}
+
 // Project Type
 enum ProjectStatus {
   ACTIVE,
@@ -148,7 +160,7 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
 
 // -----
 // Project List Item Class
-class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable {
   private project: Project;
 
   get persons() {
@@ -157,6 +169,7 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
     }
     return `${this.project.people} persons`;
   }
+
   constructor(hostId: string, project: Project) {
     super('single-project', hostId, false, project.id);
     this.project = project;
@@ -165,11 +178,24 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
     this.renderContent();
   }
 
-  configure() {}
+  configure() {
+    this.element.addEventListener('dragstart', this.dragStartHandler);
+    this.element.addEventListener('dragend', this.dragEndHandler);
+  }
+
   renderContent() {
     this.element.querySelector('h2')!.textContent = this.project.title;
     this.element.querySelector('h3')!.textContent = this.persons + ' assigned';
     this.element.querySelector('p')!.textContent = this.project.description;
+  }
+
+  @Autobind
+  dragStartHandler(event: DragEvent) {
+    console.log(event);
+  }
+
+  dragEndHandler(_event: DragEvent) {
+    console.log('drag end');
   }
 }
 
