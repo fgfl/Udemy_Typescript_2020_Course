@@ -11,3 +11,5 @@ https://www.udemy.com/course/understanding-typescript/
 ### [Section 8 Decorators](./section8_decorators.md)
 
 ### [Section 9 Practice Time! Let's build a Drag & Drop Project](./section9_dragDropProject.md)
+
+### [Section 10 MOdules & Namespaces](./section10_modules_namespaces.md)
