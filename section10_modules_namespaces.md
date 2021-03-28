@@ -103,3 +103,9 @@ import { decoratorName as DecoratorName } from '../decorators/myDecorator.js';
 
 - imported code is only run once on the first time it is import
   - it doe not run again on further imports
+
+## Links
+
+JavaScript Modules (Overview): https://medium.com/computed-comparisons/commonjs-vs-amd-vs-requirejs-vs-es6-modules-2e814b114a0b
+
+More on ES Modules: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
