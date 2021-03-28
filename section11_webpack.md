@@ -24,3 +24,42 @@ webpack-cli: used to run commands in our project
 webpack-dev-server: gives us a server, watches files and triggers recompile
 ts-loader: tells webpack how to compile our TS code to JS
 typescript: gives us typescript, but also good to include it here as a fallback in case it gets removed or the global version gets updated. The project knows it can use the version stated in the package.json file
+
+## Adding Entry & Output Configuration
+
+- in tsconfig.json:
+
+  - don't include `outFile`. We are using modules
+  - don't include `rootDir`. Webpack will take care of it.
+
+- create a new file `webpack.config.js`
+
+  - webpack options live here
+
+  ```js
+  const path = require('path');
+
+  module.exports = {
+    mode: 'development',
+    entry: './src/app.ts', // start of our project
+    output: {
+      filename: 'bundle.js', // output filename
+      path: path.resolve(__dirname, 'dist'), // needs absolute path. use path module
+    },
+    devtool: 'inline-source-map', // use source map for debugging. Need `sourceMap: true` in tsconfig
+    module: {
+      rules: [
+        {
+          test: /\.ts$/, // find all .ts files
+          use: 'ts-loader', // let ts-laoder hendle them
+          exclude: /node_modules/, // ignore node_modules
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.ts', '.js'], // which files webpack adds to the imports it finds. Add TS and JS files
+    },
+  };
+  ```
+
+- remove the `.js` extension from the imports. Webpack doesn't need them.
