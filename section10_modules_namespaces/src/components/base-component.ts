@@ -1,4 +1,3 @@
-namespace App {
   // Base component
   /**
    * @template T host element type
@@ -37,4 +36,3 @@ namespace App {
     abstract configure(): void;
     abstract renderContent(): void;
   }
-}

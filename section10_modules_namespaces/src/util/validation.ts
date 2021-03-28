@@ -1,4 +1,3 @@
-namespace App {
   // Validation
   interface Validatable {
     required?: boolean;
@@ -37,4 +36,3 @@ namespace App {
 
     return isValid;
   }
-}

@@ -46,3 +46,10 @@ namespace NamespaceName {
   }
 }
 ```
+
+## Using ES Modules
+
+- set `"module": "es2015"` in `tsconfig.json` to say we are using ES modules
+- Do no include the `outFile` option
+- the `script` tag in the HTML file should specify the compiled `app.js` file
+  - `script` tag must use `type="modules"` as an option
