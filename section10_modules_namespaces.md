@@ -49,7 +49,57 @@ namespace NamespaceName {
 
 ## Using ES Modules
 
+- problem with `/// <reference path=''>` and `namespace`:
+
+  - if one file has a reference in the namespace, another file with the same namespace doesn't need to add the `reference` to the file.
+  - leads to issue where we don't know if and where things are imported
+
 - set `"module": "es2015"` in `tsconfig.json` to say we are using ES modules
+  - We get _defined is not defined_ error if we don't
 - Do no include the `outFile` option
 - the `script` tag in the HTML file should specify the compiled `app.js` file
+
   - `script` tag must use `type="modules"` as an option
+
+- now we can use `import` instad of the `/// <reference path=''>` syntax
+
+## Understanding various Import & Export Syntaxes
+
+### import everything as an object
+
+- can do `import * as Validation from '../utils/validation.js'`
+- this lets us use `Validation` as an object that contains all the exports from the `validation.js` file
+
+```ts
+const peopleValidatable: Validation.Validatable = {
+  /* stuff here */
+};
+// call the validate function
+Validation.validate(/* stuff to validate */);
+```
+
+### import as an alias
+
+- use alias to change the imported object/function's name
+
+  - can use to avoid name clashes
+
+- below capitalize the decorator name
+
+```ts
+import { decoratorName as DecoratorName } from '../decorators/myDecorator.js';
+```
+
+### import a default export
+
+- export default with `export default MyClass`
+  - can only have one
+  - can still have other non-default exports in the file
+- import with `import MyClass from './myClass.js'`
+  - no brace around the import variable name b/c JS knows to use the default
+  - can change name of variable to anything `import SomeClassName from './myClass.js'`
+
+## How Does Code in Modules Execute?
+
+- imported code is only run once on the first time it is import
+  - it doe not run again on further imports
