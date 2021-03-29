@@ -45,6 +45,7 @@ typescript: gives us typescript, but also good to include it here as a fallback 
     output: {
       filename: 'bundle.js', // output filename
       path: path.resolve(__dirname, 'dist'), // needs absolute path. use path module
+      publicPath: 'dist',
     },
     devtool: 'inline-source-map', // use source map for debugging. Need `sourceMap: true` in tsconfig
     module: {
@@ -63,3 +64,11 @@ typescript: gives us typescript, but also good to include it here as a fallback 
   ```
 
 - remove the `.js` extension from the imports. Webpack doesn't need them.
+
+- **Just run the `webpack` command to run webpack. Can set up npm script**
+
+## webpack-dev-server
+
+- run `webpack serve --open`. Set up an npm script for this
+  - e.g. replace `npm start`
+- this will listen for changes and refresh the page
