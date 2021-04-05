@@ -1,5 +1,7 @@
 # Section 11 Using Webpack with Typescript
 
+Official Webpack docs: https://webpack.js.org/
+
 ## What is Webpack & Why do we need it?
 
 - We have many compiled .js files the browser needs to get (multiple HTTP requests) which leads to a lot of over head and causes things to load slower
@@ -72,3 +74,9 @@ typescript: gives us typescript, but also good to include it here as a fallback 
 - run `webpack serve --open`. Set up an npm script for this
   - e.g. replace `npm start`
 - this will listen for changes and refresh the page
+
+## Production workflow
+
+- use `clean-webpack-plugin` to clean `dist` folder
+- set `devtools` to `none` to not have debugging symbols
+- remove `publicPath`
