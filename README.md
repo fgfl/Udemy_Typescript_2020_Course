@@ -15,3 +15,5 @@ https://www.udemy.com/course/understanding-typescript/
 ### [Section 10 Modules & Namespaces](./section10_modules_namespaces.md)
 
 ### [Section 11 Using Webpack with Typescript](./section11_webpack)
+
+### [Section 12 3rd Party Libraries & Typescript](./section12_3rd_party_libraries.md)
