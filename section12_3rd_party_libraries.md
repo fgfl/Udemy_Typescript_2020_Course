@@ -12,3 +12,11 @@
 - need to install types package for lodash for TS to get the translations from JS to TS
   - use definitley typed library
   - `npm i --save-dev @types/lodash`
+
+### Using "decalre" as a "Last Resort"
+
+- what if no types package exist?
+  - e.g. global variable set in inline script code in html file
+  - can use `declare`
+    - tells TS that it will exists
+    - `decalre let GLOBAL: any;`
