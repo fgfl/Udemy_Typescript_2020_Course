@@ -20,3 +20,9 @@
   - can use `declare`
     - tells TS that it will exists
     - `decalre let GLOBAL: any;`
+
+### No Types Needed: class-transformer
+
+- package for tranforming data into a class object
+
+### TypeScript - embracing: class-validator
